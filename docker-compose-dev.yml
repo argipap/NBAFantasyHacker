@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  users:
+    container_name: users
+    build:
+      context: ./services/users
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/users:/usr/src/app'
+    ports:
+      - 5001:5000
+    environment:
+      - FLASK_DEBUG=1
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@yahoo_users-db:5432/users_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@yahoo_users-db:5432/users_test
+      - SECRET_KEY=my_precious
+      - DATA_DIR=./services/users/project/data
+    depends_on:
+      - yahoo_users-db
+    links:
+      - yahoo_users-db
+
+  yahoo_users-db:
+    container_name: yahoo_users-db
+    build:
+      context: ./services/users/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
