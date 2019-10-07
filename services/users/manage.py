@@ -1,39 +1,15 @@
 # services/users/manage.py
 
 import unittest
-import re
-import json
 from flask.cli import FlaskGroup
 from project import create_app, db
-from project.utils.yahooAdapter import YahooFantasyAPI
-from project.api.models.player import Player
+from project.utils.util import get_statistics, get_players, fetch_draft_results_archive
 from project.api.models.statistic import Statistic
+from project.api.views.players import Player
+from project.utils.webscraping.pages.draft_results_page import DraftResultsPage
 
 app = create_app()
 cli = FlaskGroup(create_app=create_app)
-
-
-def get_players():
-    api = YahooFantasyAPI()
-    player_list = []
-    for start in range(0, 709, 25):
-        players = api.get_players(start)
-        for player in players:
-            player_first_name = player['name']['first']
-            player_last_name = player['name']['last']
-            player_id = player['player_id']
-            player_info = dict()
-            player_info["player_id"] = player_id
-            player_info["first_name"] = player_first_name
-            player_info["last_name"] = player_last_name
-            player_list.append(player_info)
-    return player_list
-
-
-def get_statistics():
-    api = YahooFantasyAPI()
-    statistics = api.get_league_stats(api.fetch_league_settings())
-    return statistics
 
 
 @cli.command()
@@ -74,10 +50,16 @@ def recreate_db():
     db.session.commit()
 
 
+# @cli.command()
+# def test_stats():
+#     api = YahooFantasyAPI()
+#     result = Player.get_player_stats(3704, 2018)
+#     print(result)
+
+
 @cli.command()
-def test_stats():
-    api = YahooFantasyAPI()
-    result = api.get_player_stats(3704, 2018)
+def test_player_id():
+    result = Player.get_player_id_by_full_name('Vince', 'Carter')
     print(result)
 
 
@@ -90,12 +72,20 @@ def test():
         return 0
     return 1
 
-
+#
+# @cli.command()
+# def test_league_id():
+#     api = YahooFantasyAPI()
+#     result = api.get_league_id('kantina', '2016')
+#     print(result)
+#
+#
 @cli.command()
-def test_league_id():
-    api = YahooFantasyAPI()
-    result = api.get_league_id('kantina', '2016')
-    print(result)
+def test_new():
+    year = '2017'
+    league_id = 6370
+    page = fetch_draft_results_archive(year, league_id)
+    print(DraftResultsPage(page).teams)
 
 
 if __name__ == '__main__':
