@@ -1,7 +1,6 @@
 Flask==0.12.2
 Flask-SQLAlchemy==2.3.2
 psycopg2==2.7.3.2
-Flask-Testing==0.6.2
 yahoo_oauth
 xmltodict
 gunicorn==19.7.1
@@ -13,3 +12,5 @@ flask-migrate==2.1.1
 flask-bcrypt==0.7.1
 pyjwt==1.5.3
 html-parser==0.2
+flask_testing==0.7.1
+beautifulsoup4==4.8.0

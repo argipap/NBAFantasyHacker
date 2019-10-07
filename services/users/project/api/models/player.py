@@ -20,3 +20,11 @@ class Player(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name
         }
+
+    @classmethod
+    def get_player_id_by_full_name(cls, first_name, last_name):
+        player = cls.query.filter_by(first_name=first_name).\
+            filter_by(last_name=last_name).\
+            first()
+        if player:
+            return player.player_id
