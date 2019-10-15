@@ -3,9 +3,9 @@
 import unittest
 from flask.cli import FlaskGroup
 from project import create_app, db
-from project.utils.util import get_statistics, get_players, fetch_draft_results_archive
-from project.api.models.statistic import Statistic
-from project.api.views.players import Player
+from project.utils.util import get_statistics, get_players, fetch_draft_results_archive, get_stat_modifiers
+from project.models.statistic import Statistic
+from project.views.players import Player
 from project.utils.webscraping.pages.draft_results_page import DraftResultsPage
 
 app = create_app()
@@ -30,17 +30,40 @@ def seed_db_players():
 @cli.command()
 def seed_db_stats():
     """Seeds the database."""
-    statistics = get_statistics()
+    statistics, modifiers = get_statistics()
+    print(statistics)
+    print(modifiers)
     for stat in statistics:
-        print(stat['stat']['stat_id'], stat['stat']['name'], stat['stat']['display_name'])
-        db.session.add(
-            Statistic(
-                statistic_id=int(stat['stat']['stat_id']),
-                stat_short_name=stat['stat']['name'],
-                stat_full_name=stat['stat']['display_name']
-            )
-        )
+        for modifier in modifiers:
+            if stat['stat']['stat_id'] == modifier['stat']['stat_id']:
+                modifier_value = modifier['stat']['value']
+                db.session.add(
+                    Statistic(
+                        statistic_id=int(stat['stat']['stat_id']),
+                        stat_short_name=stat['stat']['display_name'],
+                        stat_full_name=stat['stat']['name'],
+                        stat_modifier=modifier_value
+                    )
+                )
+            else:
+                continue
     db.session.commit()
+
+
+@cli.command()
+def seed_db_stat_modifiers():
+    """Seeds the database."""
+    modifiers = get_stat_modifiers()
+    print(modifiers)
+    # for stat in statistics:
+    #     db.session.add(
+    #         Statistic(
+    #             statistic_id=int(stat['stat']['stat_id']),
+    #             stat_short_name=stat['stat']['name'],
+    #             stat_full_name=stat['stat']['display_name']
+    #         )
+    #     )
+    # db.session.commit()
 
 
 @cli.command()
@@ -86,6 +109,11 @@ def test_new():
     league_id = 6370
     page = fetch_draft_results_archive(year, league_id)
     print(DraftResultsPage(page).teams)
+
+
+# @cli.command()
+# def test_fan():
+#     print(get_player_fanpoints(3704, '2018'))
 
 
 if __name__ == '__main__':

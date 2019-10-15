@@ -31,13 +31,13 @@ def create_app(script_info=None):
     bcrypt.init_app(app)
 
     # register blueprints
-    from project.api.views.users import users_blueprint
+    from project.views.users import users_blueprint
     app.register_blueprint(users_blueprint)
-    from project.api.views.league import league_blueprint
+    from project.views.league import league_blueprint
     app.register_blueprint(league_blueprint)
-    from project.api.views.players import players_blueprint
+    from project.views.players import players_blueprint
     app.register_blueprint(players_blueprint)
-    from project.api.views.games import games_blueprint
+    from project.views.games import games_blueprint
     app.register_blueprint(games_blueprint)
 
     # shell context for flask cli

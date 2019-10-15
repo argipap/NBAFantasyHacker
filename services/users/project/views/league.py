@@ -1,6 +1,7 @@
 # services/users/project/api/views/league.py
 from flask import Blueprint, jsonify
 from project.utils.yahooAdapter import YahooFantasyAPI
+from project.models.statistic import Statistic
 import re
 import json
 import datetime
@@ -75,9 +76,14 @@ def get_league_id(league_name, year):
     return league_id
 
 
-def get_league_stats(settings):
-    stats_list = settings['fantasy_content']['league'][1]['settings'][0]['stat_categories']['stats']
-    return stats_list
+@league_blueprint.route('/kbinator/league/stats', methods=['GET'])
+def get_league_stats():
+    return jsonify({
+        'status': 'success',
+        'data': {
+                    'statistics': [statistic.to_json() for statistic in Statistic.query.all()]
+                }
+    }), 200
 
 
 def get_draft_results_archive(league_id, year):

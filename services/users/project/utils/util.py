@@ -1,5 +1,5 @@
 from project import db
-from project.api.models.player import Player
+from project.models.player import Player
 from project.utils.yahooAdapter import YahooFantasyAPI
 
 
@@ -22,8 +22,14 @@ def get_players():
 
 def get_statistics():
     api = YahooFantasyAPI()
-    statistics = api.get_league_stats(api.fetch_league_settings())
-    return statistics
+    statistics, modifiers = api.get_league_stats(api.fetch_league_settings())
+    return statistics, modifiers
+
+
+def get_stat_modifiers():
+    api = YahooFantasyAPI()
+    stat_modifiers = api.get_league_stat_modifiers(api.fetch_league_settings())
+    return stat_modifiers
 
 
 def add_player(p_id, first_name, last_name):

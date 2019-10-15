@@ -1,8 +1,7 @@
 # services/users/project/tests/test_users.py
-import json
 import unittest
 
-from project.api.models.player import Player
+from project.models.player import Player
 from project.tests.base import BaseTestCase
 from project.utils.util import add_player
 

@@ -1,5 +1,4 @@
 from yahoo_oauth import OAuth2
-from project.api.models.statistic import Statistic
 from project.utils.decorators import jsonify
 import os
 import xmltodict
@@ -38,18 +37,23 @@ class YahooFantasyAPI:
 
     def get_league_stats(self, settings):
         stats_list = settings['fantasy_content']['league'][1]['settings'][0]['stat_categories']['stats']
+        stats_modifiers = settings['fantasy_content']['league'][1]['settings'][0]['stat_modifiers']['stats']
+        return stats_list, stats_modifiers
+
+    def get_league_stat_modifiers(self, settings):
+        stats_list = settings['fantasy_content']['league'][1]['settings'][0]['stat_modifiers']['stats']
         return stats_list
 
-    def get_player_stat_value(self, player_statistics):
-        for player_stat in player_statistics:
-            if player_stat['stat_id'] == player_stat[0].text:
-                return player_stat[1].text
-
-    def get_stat_id(self, display_name, stat_list):
-        for stat in stat_list:
-            if stat['display_name'] == display_name:
-                return stat['stat_id']
-        return -1
+    # def get_player_stat_value(self, player_statistics):
+    #     for player_stat in player_statistics:
+    #         if player_stat['stat_id'] == player_stat[0].text:
+    #             return player_stat[1].text
+    #
+    # def get_stat_id(self, display_name, stat_list):
+    #     for stat in stat_list:
+    #         if stat['display_name'] == display_name:
+    #             return stat['stat_id']
+    #     return -1
 
     @staticmethod
     def get_session():
