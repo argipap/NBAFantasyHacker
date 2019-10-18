@@ -1,5 +1,5 @@
 # services/users/project/api/views/players.py
-from flask import Blueprint, jsonify, render_template
+from flask import Blueprint, jsonify, render_template, request, redirect, url_for
 
 from project.models.player import Player
 from project.models.statistic import Statistic
@@ -8,7 +8,7 @@ from project.utils.yahooAdapter import YahooFantasyAPI
 players_blueprint = Blueprint('players', __name__)
 
 
-@players_blueprint.route('/kbinator/players', methods=['GET'])
+@players_blueprint.route('/players', methods=['GET'])
 def get_players():
     """Get all players"""
     # response_object = {
@@ -20,7 +20,7 @@ def get_players():
     # return jsonify(response_object), 200
 
 
-@players_blueprint.route('/kbinator/player/stats/<player_id>/<year>', methods=['GET'])
+@players_blueprint.route('/player/stats/<player_id>/<year>', methods=['GET'])
 def get_player_stats(player_id, year):
     player_stats = {}
     data = get_player_info(player_id, year)
@@ -33,7 +33,7 @@ def get_player_stats(player_id, year):
     })
 
 
-@players_blueprint.route('/kbinator/player/fanpoints/<player_id>/<year>', methods=['GET'])
+@players_blueprint.route('/player/fanpoints/<player_id>/<year>', methods=['GET'])
 def get_player_fanpoints(player_id, year):
     data = get_player_stats(player_id, year).get_json()
     fan_points = 0
@@ -47,7 +47,7 @@ def get_player_fanpoints(player_id, year):
     })
 
 
-@players_blueprint.route('/kbinator/players/<name>', methods=['GET'])
+@players_blueprint.route('/players/<name>', methods=['GET'])
 def get_player_id(name):
     players = Player.query.filter(Player.first_name.ilike(f"%{name}%") | Player.last_name.ilike(f"%{name}%")).all()
     if len(players) == 0:
@@ -62,6 +62,17 @@ def get_player_id(name):
         'status': 'success',
         'players': players_list
     }), 200
+
+
+@players_blueprint.route('/fanpoints/calculator', methods=['GET', 'POST'])
+def calculate_fanpoints():
+    if request.method == 'POST':
+        fan_points = 0
+        for modifier_name, modifier_value in request.form.items():
+            fan_points = fan_points + (float(modifier_value) * float(Statistic.get_stat_modifier_by_name(modifier_name)))
+        return str(fan_points)
+
+    return render_template("fanpoints/calculator.html")
 
 
 def get_player_info(player_id, year):

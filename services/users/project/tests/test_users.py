@@ -9,7 +9,7 @@ class TestUserService(BaseTestCase):
     """Tests for the users service"""
     def test_users(self):
         """Ensure the ping route behaves properly"""
-        response = self.client.get('/users/ping')
+        response = self.client.get('/kba/users/ping')
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertIn('pong!', data['message'])

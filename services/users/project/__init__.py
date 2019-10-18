@@ -34,11 +34,11 @@ def create_app(script_info=None):
     from project.views.users import users_blueprint
     app.register_blueprint(users_blueprint)
     from project.views.league import league_blueprint
-    app.register_blueprint(league_blueprint)
+    app.register_blueprint(league_blueprint, url_prefix='/kba')
     from project.views.players import players_blueprint
-    app.register_blueprint(players_blueprint)
+    app.register_blueprint(players_blueprint, url_prefix='/kba')
     from project.views.games import games_blueprint
-    app.register_blueprint(games_blueprint)
+    app.register_blueprint(games_blueprint, url_prefix='/kba')
 
     # shell context for flask cli
     app.shell_context_processor({'app': app, 'db': db})

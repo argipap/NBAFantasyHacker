@@ -1,6 +1,5 @@
 # services/users/project/api/views/users.py
-from flask import Blueprint, jsonify
-
+from flask import Blueprint, jsonify, render_template
 
 users_blueprint = Blueprint('users', __name__, template_folder='./templates')
 
@@ -11,3 +10,8 @@ def ping_ping():
         'status': 'success',
         'message': 'pong!'
     })
+
+
+@users_blueprint.route('/', methods=['GET'])
+def home():
+    return render_template("home.html")

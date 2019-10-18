@@ -1,6 +1,8 @@
 # services/users/manage.py
 
 import unittest
+
+from flask import render_template
 from flask.cli import FlaskGroup
 from project import create_app, db
 from project.utils.util import get_statistics, get_players, fetch_draft_results_archive, get_stat_modifiers

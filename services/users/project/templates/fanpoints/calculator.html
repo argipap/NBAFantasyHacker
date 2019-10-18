@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="form">
+        <form action="{{ url_for('players.calculate_fanpoints') }}" method="post">
+{#        <form action="#" method="post">#}
+            <div class="form-group">
+                <label for="3PTM">Three Pointers Made</label>
+                <input type="text" class="form-control" id="3PTM" name="3PTM" placeholder="3PTM">
+            </div>
+            <div class="form-group">
+                <label for="AST">Assists</label>
+                <input type="text" class="form-control" name="AST" id="AST" placeholder="AST">
+            </div>
+             <div class="form-group">
+                <label for="BLK">Blocks</label>
+                <input type="text" class="form-control" name="BLK" id="BLK" placeholder="BLK">
+            </div>
+             <div class="form-group">
+                <label for="FGA">Field Goals Attempted</label>
+                <input type="text" class="form-control" name="FGA" id="FGA" placeholder="FGA">
+            </div>
+             <div class="form-group">
+                <label for="FGM">Field Goals Made</label>
+                <input type="text" class="form-control" name="FGM" id="FGM" placeholder="FGM">
+            </div>
+            <div class="form-group">
+                <label for="FTA">Field Throws Attempted</label>
+                <input type="text" class="form-control" name="FTA" id="FTA" placeholder="FTA">
+            </div>
+             <div class="form-group">
+                <label for="FTM">Field Throws Made</label>
+                <input type="text" class="form-control" name="FTM" id="FTM" placeholder="FTM">
+            </div>
+             <div class="form-group">
+                <label for="PTS">Points</label>
+                <input type="text" class="form-control" name="PTS" id="PTS" placeholder="PTS">
+            </div>
+             <div class="form-group">
+                <label for="REB">Rebounds</label>
+                <input type="text" class="form-control" name="REB" id="REB" placeholder="REB">
+            </div>
+             <div class="form-group">
+                <label for="ST">Steals</label>
+                <input type="text" class="form-control" name="ST" id="ST" placeholder="ST">
+            </div>
+             <div class="form-group">
+                <label for="TO">Turnovers</label>
+                <input type="text" class="form-control" name="TO" id="TO" placeholder="TO">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}
