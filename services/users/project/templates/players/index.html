@@ -2,13 +2,13 @@
 
 {% block content %}
 <header>
-    <h1>Players</h1>
+    <h1>Players Total FanPoints - 2018</h1>
 </header>
 <section>
     <div class="list-group">
-        {% for player in players %}
+        {% for player in players|sort(attribute='fan_points', reverse=True) %}
         <div class="list-group-item">
-            <h4 class="list-group-item-heading">{{ player.first_name }} {{ player.last_name }}</h4>
+            <h4 class="list-group-item-heading">{{loop.index}}. {{ player.first_name }} {{ player.last_name }}: {{ player.fan_points }}</h4>
         </div>
         {% endfor %}
     </div>

@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify
 
 from project.utils.webscraping.pages.draft_results_page import DraftResultsPage
 from project.utils.yahooAdapter import YahooFantasyAPI
-from project.models.statistic import Statistic
+from project.models.statistics import StatisticCategory
 import re
 import json
 import datetime
@@ -22,6 +22,19 @@ def get_league_settings():
                     'settings': league_settings
                 }
     })
+
+
+@league_blueprint.route('/league/teams', methods=['GET'])
+def get_teams():
+    data = get_league_teams_info()
+    return data['fantasy_content']['league'][1]['teams']
+
+
+def get_league_teams_info():
+    api = YahooFantasyAPI()
+    request_uri = f"{api.uri}/league/{api.league_key}/teams?format={api.request_format}"
+    league_teams = api.yahoo_request(request_uri)
+    return league_teams
 
 
 @league_blueprint.route('/league/standings', methods=['GET'])
@@ -82,7 +95,7 @@ def get_league_stats():
     return jsonify({
         'status': 'success',
         'data': {
-                    'statistics': [statistic.to_json() for statistic in Statistic.query.all()]
+                    'statistics': [statistic.to_json() for statistic in StatisticCategory.query.all()]
                 }
     }), 200
 

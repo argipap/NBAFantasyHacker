@@ -2,7 +2,7 @@
 from flask import Blueprint, jsonify
 from project.utils.yahooAdapter import YahooFantasyAPI
 
-games_blueprint = Blueprint('games', __name__, template_folder='./templates')
+games_blueprint = Blueprint('games', __name__)
 
 
 @games_blueprint.route('/game/<game_name>', methods=['GET'])

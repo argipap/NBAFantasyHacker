@@ -1,4 +1,4 @@
-from project.utils.yahooAdapter import api
+from project.utils.yahooAdapter import YahooFantasyAPI
 
 
 class League:
@@ -6,6 +6,7 @@ class League:
         self.settings = League.get_settings()
         self.statistics = League.get_league_stats(self.settings)
         self.teams = []
+        self.draft_results = []
         self.transactions = []
         self.users = []
 
@@ -16,4 +17,4 @@ class League:
 
     @classmethod
     def get_settings(cls):
-        return api.fetch_league_settings()
+        return YahooFantasyAPI().fetch_league_settings()
